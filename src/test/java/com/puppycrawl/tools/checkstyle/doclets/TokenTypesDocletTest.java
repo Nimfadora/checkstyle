@@ -170,6 +170,10 @@ public class TokenTypesDocletTest extends AbstractPathTestSupport {
         final JavadocTool javadocTool = JavadocTool.make0(context);
         final RootDoc rootDoc = getRootDoc(javadocTool, options, names);
         final ClassDoc[] classes = rootDoc.classes();
+        assertEquals("Should parse first sentence: " + classes[0].fields()[0].commentText()
+                        + "- into one tag. Actual tags: "
+                        + Arrays.toString(classes[0].fields()[0].firstSentenceTags()),
+                1, classes[0].fields()[0].firstSentenceTags().length);
         assertEquals("Should parse first sentence: " + classes[0].commentText()
                         + "- into one tag. Actual tags: "
                         + Arrays.toString(classes[0].firstSentenceTags()),
