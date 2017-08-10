@@ -28,8 +28,7 @@ import static org.junit.Assert.fail;
 import java.io.File;
 import java.lang.reflect.Method;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import javax.tools.JavaFileObject;
 
@@ -38,7 +37,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import com.puppycrawl.tools.checkstyle.AbstractPathTestSupport;
-import com.sun.javadoc.RootDoc;
+import com.sun.javadoc.*;
 import com.sun.tools.javac.util.Context;
 import com.sun.tools.javac.util.ListBuffer;
 import com.sun.tools.javadoc.JavadocTool;
@@ -156,6 +155,25 @@ public class TokenTypesDocletTest extends AbstractPathTestSupport {
         assertTrue("File content is not expected",
                 fileContent.startsWith("EOF=The end of file token."));
 
+    }
+
+    @Test
+    public void testJavadocParsedIncorrectly() throws Exception {
+        final ListBuffer<String[]> options = new ListBuffer<>();
+        options.add(new String[] {"-destfile", "target/tokentypes.properties"});
+
+        final ListBuffer<String> names = new ListBuffer<>();
+        names.add(getPath("InputTokenTypesDocletJavadocParseError.java"));
+
+        final Context context = new Context();
+        new TestMessager(context);
+        final JavadocTool javadocTool = JavadocTool.make0(context);
+        final RootDoc rootDoc = getRootDoc(javadocTool, options, names);
+        final ClassDoc[] classes = rootDoc.classes();
+        assertEquals("Should parse first sentence: " + classes[0].commentText()
+                        + "- into one tag. Actual tags: "
+                        + Arrays.toString(classes[0].firstSentenceTags()),
+                1, classes[0].firstSentenceTags().length);
     }
 
     private static RootDoc getRootDoc(JavadocTool javadocTool, ListBuffer<String[]> options,
