@@ -175,6 +175,28 @@ public class EqualsAvoidNullCheckTest extends AbstractModuleTestSupport {
         verify(checkConfig, getPath("InputEqualsAvoidNullNested.java"), expected);
     }
 
+
+    @Test
+    public void testEqualsNestedFull() throws Exception {
+        final DefaultConfiguration checkConfig =
+                createModuleConfig(EqualsAvoidNullCheck.class);
+
+        final String[] expected = {
+                "1034:29: " + getCheckMessage(MSG_EQUALS_AVOID_NULL),
+
+                "1122:44: " + getCheckMessage(MSG_EQUALS_IGNORE_CASE_AVOID_NULL),
+                "1123:48: " + getCheckMessage(MSG_EQUALS_IGNORE_CASE_AVOID_NULL),
+                "1124:48: " + getCheckMessage(MSG_EQUALS_IGNORE_CASE_AVOID_NULL),
+
+                "1159:44: " + getCheckMessage(MSG_EQUALS_IGNORE_CASE_AVOID_NULL),
+                "1175:49: " + getCheckMessage(MSG_EQUALS_IGNORE_CASE_AVOID_NULL),
+                "1189:49: " + getCheckMessage(MSG_EQUALS_IGNORE_CASE_AVOID_NULL),
+                "1206:49: " + getCheckMessage(MSG_EQUALS_IGNORE_CASE_AVOID_NULL),
+                "1221:49: " + getCheckMessage(MSG_EQUALS_IGNORE_CASE_AVOID_NULL),
+        };
+        verify(checkConfig, getNonCompilablePath("AppletViewer.java"), expected);
+    }
+
     @Test
     public void testTokensNotNull() {
         final EqualsAvoidNullCheck check = new EqualsAvoidNullCheck();
